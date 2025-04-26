@@ -26,7 +26,7 @@ namespace TaskManager.API.Task.Models
         [ForeignKey("OwnerId")]
         public User.UserModel? Owner { get; set; }
 
-        // Colaboradores
-        // public ICollection<TaskCollaborationModel>? Collaborators { get; set; }
+        // Navegación al historial de tareas
+        public ICollection<TaskHistoryModel>? History { get; set; }
     }
 }

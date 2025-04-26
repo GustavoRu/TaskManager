@@ -1,12 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using TaskManager.API.Auth.DTOs;
-using TaskManager.API.User;
-using TaskManager.API.Shared.Data;
-using TaskManager.API.Shared.Models;
-using TaskManager.API.Shared.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using TaskManager.API.Auth.DTOs;
+using TaskManager.API.Auth;
 namespace TaskManager.API.Auth
 {
 
@@ -15,13 +10,17 @@ namespace TaskManager.API.Auth
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly JwtUtility _jwtUtility;
+        private readonly IAuthService _authService;
+        private readonly RegisterDtoValidator _registerValidator;
+        private readonly LoginDtoValidator _loginValidator;
 
-        public AuthController(ApplicationDbContext context, JwtUtility jwtUtility)
+        public AuthController(IAuthService authService,
+            RegisterDtoValidator registerValidator,
+            LoginDtoValidator loginValidator)
         {
-            _context = context;
-            _jwtUtility = jwtUtility;
+            _authService = authService;
+            _registerValidator = registerValidator;
+            _loginValidator = loginValidator;
         }
 
 
@@ -29,35 +28,25 @@ namespace TaskManager.API.Auth
         [Route("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
-            var user = new UserModel
-            {
-                Name = registerDto.Name,
-                Email = registerDto.Email,
-                PasswordHash = _jwtUtility.encryptSHA256(registerDto.Password)
-            };
-
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-
-            if (user.UserId != 0)
-            {
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = true });
+            var validationResult = await _registerValidator.ValidateAsync(registerDto);
+            if (!validationResult.IsValid){
+                return BadRequest(validationResult.Errors);
             }
-
-            return StatusCode(StatusCodes.Status200OK, new { isSuccess = false });
+            var isSuccess = await _authService.RegisterUserAsync(registerDto);
+            return Ok(new { isSuccess });
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            var userFind = await _context.Users.Where(u => u.Email == loginDto.Email && u.PasswordHash == _jwtUtility.encryptSHA256(loginDto.Password)).FirstOrDefaultAsync();
-
-            if (userFind == null)
+            var validationResult = await _loginValidator.ValidateAsync(loginDto);
+            if (!validationResult.IsValid)
             {
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false });
+                return BadRequest(validationResult.Errors);
             }
-            return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token = _jwtUtility.GenerateJwtToken(userFind) });
+            var (isSuccess, token) = await _authService.LoginUserAsync(loginDto);
+            return Ok(new { isSuccess, token });
 
         }
     }

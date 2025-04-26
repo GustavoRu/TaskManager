@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TaskManager.API.Shared.Data;
 using TaskManager.API.Shared.Utils;
+using TaskManager.API.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,16 @@ builder.Services.AddAuthentication(config =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!))
     };
 });
+
+//services
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+//repositories
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+//validators
+builder.Services.AddScoped<RegisterDtoValidator>();
+builder.Services.AddScoped<LoginDtoValidator>();
 
 
 // Add Authorization

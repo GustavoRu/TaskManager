@@ -45,9 +45,8 @@ namespace TaskManager.API.Auth
             {
                 return BadRequest(validationResult.Errors);
             }
-            var (isSuccess, token) = await _authService.LoginUserAsync(loginDto);
-            return Ok(new { isSuccess, token });
-
+            var (isSuccess, token, userId) = await _authService.LoginUserAsync(loginDto);
+            return Ok(new { isSuccess, token, userId });
         }
     }
 

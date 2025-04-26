@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TaskManager.API.Task.Models;
-namespace TaskManager.API.User.Models
+namespace TaskManager.API.User
 {
     public class UserModel
     {

@@ -24,7 +24,7 @@ namespace TaskManager.API.Task.Models
         // FK y navegación al propietario
         public int OwnerId { get; set; }
         [ForeignKey("OwnerId")]
-        public User.Models.UserModel? Owner { get; set; }
+        public User.UserModel? Owner { get; set; }
 
         // Colaboradores
         // public ICollection<TaskCollaborationModel>? Collaborators { get; set; }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskManager.API.Shared.Models;
 using TaskManager.API.Task.Models;
-using TaskManager.API.User.Models;
+using TaskManager.API.User;
 namespace TaskManager.API.Shared.Data
 {
     public class ApplicationDbContext : DbContext

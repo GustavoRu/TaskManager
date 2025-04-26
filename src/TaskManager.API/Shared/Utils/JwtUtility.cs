@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using TaskManager.API.Shared.Data;
-using TaskManager.API.User.Models;
+using TaskManager.API.User;
 
 namespace TaskManager.API.Shared.Utils
 {

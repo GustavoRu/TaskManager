@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.API.Auth.DTOs;
-using TaskManager.API.Auth;
 namespace TaskManager.API.Auth
 {
 

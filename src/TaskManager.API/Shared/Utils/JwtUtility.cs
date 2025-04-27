@@ -36,7 +36,8 @@ namespace TaskManager.API.Shared.Utils
         {
             var userClaims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Name.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Name.ToString()),
                 new Claim(ClaimTypes.Email, user.Email.ToString())
             };
 

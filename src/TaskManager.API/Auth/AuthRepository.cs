@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+
 using TaskManager.API.Shared.Data;
-using TaskManager.API.Shared.Models;
+
 using TaskManager.API.User;
 namespace TaskManager.API.Auth
 {

@@ -88,6 +88,13 @@ namespace TaskManager.API.Task
             return result;                 
         }
 
+        public async Task<List<TaskResponseDto>> GetCurrentUserTasksAsync()
+        {
+            var userId = _userContextAccessor.GetCurrentUserId();
+            var tasks = await _taskRepository.GetTasksByUserIdAsync(userId);
+            return tasks.Select(MapToTaskResponseDto).ToList();
+        }
+
         // public async Task<bool> DeleteTaskAsync(int id)
         // {
         //     var result = await _taskRepository.DeleteTaskAsync(id);
@@ -99,12 +106,7 @@ namespace TaskManager.API.Task
         //     return result;
         // }
 
-        // public async Task<List<TaskResponseDto>> GetCurrentUserTasksAsync()
-        // {
-        //     var userId = _userContextAccessor.GetCurrentUserId();
-        //     var tasks = await _taskRepository.GetTasksByUserIdAsync(userId);
-        //     return tasks.Select(MapToTaskResponseDto).ToList();
-        // }
+        
 
         public async System.Threading.Tasks.Task CreateTaskHistoryEntryAsync(int taskId, int userId, TaskAction action, object changes = null)
         {

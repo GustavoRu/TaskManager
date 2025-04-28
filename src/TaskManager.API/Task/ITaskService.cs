@@ -8,8 +8,8 @@ namespace TaskManager.API.Task
         Task<TaskResponseDto> GetTaskByIdAsync(int id);
         Task<TaskResponseDto> CreateTaskAsync(TaskPostDto taskDto);
         Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto);
+        Task<List<TaskResponseDto>> GetCurrentUserTasksAsync();
         // Task<bool> DeleteTaskAsync(int id);
-        // Task<List<TaskResponseDto>> GetCurrentUserTasksAsync();
 
 
         // System.Threading.Tasks.Task CreateTaskHistoryEntryAsync(int taskId, int userId, TaskAction action, object changes);

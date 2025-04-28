@@ -45,7 +45,10 @@ namespace TaskManager.API.Task
             return affectedRows > 0;
         }
 
-
+        public async Task<List<TaskModel>> GetTasksByUserIdAsync(int userId)
+        {
+            return await _dbContext.Tasks.Where(t => t.OwnerId == userId).Include(t => t.Owner).ToListAsync();
+        }
 
 
         public async System.Threading.Tasks.Task AddTaskHistoryAsync(TaskHistoryModel historyEntry)

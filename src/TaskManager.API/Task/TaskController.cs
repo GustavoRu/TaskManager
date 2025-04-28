@@ -81,24 +81,8 @@ namespace TaskManager.API.Task
         [HttpGet("mytasks")]
         public async Task<IActionResult> GetMyTasks()
         {
-            var userId = GetCurrentUserId();
-
-            var tasks = await _dbContext.Tasks
-                .Where(t => t.OwnerId == userId)
-                .Include(t => t.Owner)
-                .ToListAsync();
-
-            var taskDtos = tasks.Select(t => new TaskResponseDto
-            {
-                TaskId = t.TaskId,
-                Title = t.Title,
-                Description = t.Description,
-                IsCompleted = t.IsCompleted,
-                CreatedAt = t.CreatedAt,
-                OwnerId = t.OwnerId
-            }).ToList();
-
-            return Ok(taskDtos);
+            var tasks = await _taskService.GetCurrentUserTasksAsync();
+            return Ok(tasks);
         }
 
         [HttpDelete("delete/{id}")]

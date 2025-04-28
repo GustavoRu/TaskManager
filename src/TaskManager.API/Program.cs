@@ -5,6 +5,7 @@ using System.Text;
 using TaskManager.API.Shared.Data;
 using TaskManager.API.Shared.Utils;
 using TaskManager.API.Auth;
+using TaskManager.API.Task;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,13 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 //validators
 builder.Services.AddScoped<RegisterDtoValidator>();
 builder.Services.AddScoped<LoginDtoValidator>();
+
+
+//TODO:revisar
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 
 // Add Authorization

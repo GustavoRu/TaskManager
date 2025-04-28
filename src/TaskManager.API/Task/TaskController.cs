@@ -15,10 +15,12 @@ namespace TaskManager.API.Task
     public class TaskController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ITaskService _taskService;
 
-        public TaskController(ApplicationDbContext dbContext)
+        public TaskController(ApplicationDbContext dbContext, ITaskService taskService)
         {
             _dbContext = dbContext;
+            _taskService = taskService;
         }
 
         private int GetCurrentUserId()
@@ -38,22 +40,8 @@ namespace TaskManager.API.Task
         [Route("getall")]
         public async Task<IActionResult> GetAll()
         {
-            var tasks = await _dbContext.Tasks
-                .Include(t => t.Owner)
-                .ToListAsync();
-
-            var taskDtos = tasks.Select(t => new TaskResponseDto
-            {
-                TaskId = t.TaskId,
-                Title = t.Title,
-                Description = t.Description,
-                IsCompleted = t.IsCompleted,
-                CreatedAt = t.CreatedAt,
-                OwnerId = t.OwnerId
-            }).ToList();
-
-            return Ok(taskDtos);
-
+            var tasks = await _taskService.GetAllTasksAsync();
+            return Ok(tasks);
         }
 
         [HttpGet("getbyid/{id}")]

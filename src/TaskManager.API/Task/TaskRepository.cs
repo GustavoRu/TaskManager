@@ -1,0 +1,30 @@
+
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TaskManager.API.Shared.Data;
+using TaskManager.API.Task;
+using TaskManager.API.Task.Models;
+namespace TaskManager.API.Task
+{
+    public class TaskRepository : ITaskRepository
+    {
+        private readonly ApplicationDbContext _dbContext;
+        public TaskRepository(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task<List<TaskModel>> GetAllTasksAsync()
+        {
+            return await _dbContext.Tasks
+                .Include(t => t.Owner)
+                .ToListAsync();
+        }
+
+        
+
+    }
+}

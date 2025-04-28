@@ -47,10 +47,7 @@ namespace TaskManager.API.Task
         [HttpGet("getbyid/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var task = await _dbContext.Tasks
-                .Include(t => t.Owner)
-                .FirstOrDefaultAsync(t => t.TaskId == id);
-
+            var task = await _taskService.GetTaskByIdAsync(id);
             if (task == null)
                 return NotFound();
 

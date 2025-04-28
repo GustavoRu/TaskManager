@@ -6,7 +6,7 @@ namespace TaskManager.API.Task
     public interface ITaskRepository
     {
         Task<List<TaskModel>> GetAllTasksAsync();
-        // Task<TaskResponseDto> GetTaskByIdAsync(int id);
+        Task<TaskModel> GetTaskByIdAsync(int id);
         // Task<TaskResponseDto> CreateTaskAsync(TaskPostDto taskDto);
         // Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto);
         // Task<bool> DeleteTaskAsync(int id);

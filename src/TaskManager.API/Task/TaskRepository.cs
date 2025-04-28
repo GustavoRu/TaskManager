@@ -24,6 +24,13 @@ namespace TaskManager.API.Task
                 .ToListAsync();
         }
 
+        public async Task<TaskModel> GetTaskByIdAsync(int id)
+        {
+            return await _dbContext.Tasks
+                .Include(t => t.Owner)
+                .FirstOrDefaultAsync(t => t.TaskId == id);
+        }
+
         
 
     }

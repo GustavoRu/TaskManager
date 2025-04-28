@@ -36,11 +36,11 @@ namespace TaskManager.API.Task
             }).ToList();
         }
 
-        // public async Task<TaskResponseDto> GetTaskByIdAsync(int id)
-        // {
-        //     var task = await _taskRepository.GetTaskByIdAsync(id);
-        //     return task != null ? MapToTaskResponseDto(task) : null;
-        // }
+        public async Task<TaskResponseDto> GetTaskByIdAsync(int id)
+        {
+            var task = await _taskRepository.GetTaskByIdAsync(id);
+            return task != null ? MapToTaskResponseDto(task) : null;
+        }
 
         // public async Task<TaskResponseDto> CreateTaskAsync(TaskPostDto taskDto)
         // {

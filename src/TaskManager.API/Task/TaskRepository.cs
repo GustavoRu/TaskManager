@@ -50,6 +50,16 @@ namespace TaskManager.API.Task
             return await _dbContext.Tasks.Where(t => t.OwnerId == userId).Include(t => t.Owner).ToListAsync();
         }
 
+        public async Task<bool> DeleteTaskAsync(int id)
+        {
+            var task = await _dbContext.Tasks.FindAsync(id);
+            if (task == null)
+                return false;
+            _dbContext.Tasks.Remove(task);
+            var affectedRows = await _dbContext.SaveChangesAsync();
+            return affectedRows > 0;    
+        }
+
 
         public async System.Threading.Tasks.Task AddTaskHistoryAsync(TaskHistoryModel historyEntry)
         {

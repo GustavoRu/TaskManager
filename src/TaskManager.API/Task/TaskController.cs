@@ -88,25 +88,11 @@ namespace TaskManager.API.Task
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var task = await _dbContext.Tasks.FindAsync(id);
-            if (task == null)
+            var result = await _taskService.DeleteTaskAsync(id);
+            if (!result)
                 return NotFound();
 
-            _dbContext.Tasks.Remove(task);
-            await _dbContext.SaveChangesAsync();
-
-            var userId = GetCurrentUserId();
-            var historyEntry = new TaskHistoryModel
-            {
-                TaskId = id,
-                UserId = userId,
-                Action = TaskAction.Deleted,
-                Timestamp = DateTime.UtcNow
-            };
-            await _dbContext.TaskHistories.AddAsync(historyEntry);
-            await _dbContext.SaveChangesAsync();
-
-            return NoContent();
+            return NoContent();  
         }
 
     }

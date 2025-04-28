@@ -9,8 +9,8 @@ namespace TaskManager.API.Task
         Task<TaskModel> GetTaskByIdAsync(int id);
         Task<TaskModel> CreateTaskAsync(TaskModel task);
         Task<bool> UpdateTaskAsync(TaskModel task);
-         Task<List<TaskModel>> GetTasksByUserIdAsync(int userId);
-        // Task<bool> DeleteTaskAsync(int id);
+        Task<List<TaskModel>> GetTasksByUserIdAsync(int userId);
+        Task<bool> DeleteTaskAsync(int id);
         // Task<List<TaskResponseDto>> GetCurrentUserTasksAsync();
 
         System.Threading.Tasks.Task AddTaskHistoryAsync(TaskHistoryModel history);

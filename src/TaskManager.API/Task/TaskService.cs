@@ -95,16 +95,16 @@ namespace TaskManager.API.Task
             return tasks.Select(MapToTaskResponseDto).ToList();
         }
 
-        // public async Task<bool> DeleteTaskAsync(int id)
-        // {
-        //     var result = await _taskRepository.DeleteTaskAsync(id);
-        //     if (result)
-        //     {
-        //         var userId = _userContextAccessor.GetCurrentUserId();
-        //         await CreateTaskHistoryEntryAsync(id, userId, TaskAction.Deleted);
-        //     }
-        //     return result;
-        // }
+        public async Task<bool> DeleteTaskAsync(int id)
+        {
+            var result = await _taskRepository.DeleteTaskAsync(id);
+            // if (result)
+            // {
+            //     var userId = _userContextAccessor.GetCurrentUserId();
+            //     await CreateTaskHistoryEntryAsync(id, userId, TaskAction.Deleted);
+            // }
+            return result;
+        }
 
         
 

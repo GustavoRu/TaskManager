@@ -61,43 +61,8 @@ namespace TaskManager.API.Task
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userId = GetCurrentUserId();
-
-            var task = new TaskModel
-            {
-                Title = dto.Title,
-                Description = dto.Description,
-                OwnerId = userId,
-                IsCompleted = false,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            await _dbContext.Tasks.AddAsync(task);
-            await _dbContext.SaveChangesAsync();
-
-            var historyEntry = new TaskHistoryModel
-            {
-                TaskId = task.TaskId,
-                UserId = userId,
-                Action = TaskAction.Created,
-                Timestamp = DateTime.UtcNow,
-                ChangesJson = System.Text.Json.JsonSerializer.Serialize(new { })
-            };
-
-            await _dbContext.TaskHistories.AddAsync(historyEntry);
-            await _dbContext.SaveChangesAsync();
-
-            var response = new TaskResponseDto
-            {
-                TaskId = task.TaskId,
-                Title = task.Title,
-                Description = task.Description,
-                IsCompleted = task.IsCompleted,
-                CreatedAt = task.CreatedAt,
-                OwnerId = task.OwnerId
-            };
-
-            return CreatedAtAction(nameof(GetById), new { id = task.TaskId }, response);
+            var createdTask = await _taskService.CreateTaskAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = createdTask.TaskId }, createdTask);
         }
 
         [HttpPut("update/{id}")]

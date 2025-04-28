@@ -31,7 +31,12 @@ namespace TaskManager.API.Task
                 .FirstOrDefaultAsync(t => t.TaskId == id);
         }
 
-        
+        public async Task<TaskModel> CreateTaskAsync(TaskModel task)
+        {
+            await _dbContext.Tasks.AddAsync(task);
+            await _dbContext.SaveChangesAsync();
+            return task;
+        }
 
     }
 }

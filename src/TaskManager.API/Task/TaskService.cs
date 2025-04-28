@@ -42,22 +42,22 @@ namespace TaskManager.API.Task
             return task != null ? MapToTaskResponseDto(task) : null;
         }
 
-        // public async Task<TaskResponseDto> CreateTaskAsync(TaskPostDto taskDto)
-        // {
-        //     var userId = _userContextAccessor.GetCurrentUserId();
-        //     var taskModel = new TaskModel
-        //     {
-        //         Title = taskDto.Title,
-        //         Description = taskDto.Description,
-        //         OwnerId = userId,
-        //         IsCompleted = false,
-        //         CreatedAt = DateTime.UtcNow
-        //     };
+        public async Task<TaskResponseDto> CreateTaskAsync(TaskPostDto taskDto)
+        {
+            var userId = _userContextAccessor.GetCurrentUserId();
+            var taskModel = new TaskModel
+            {
+                Title = taskDto.Title,
+                Description = taskDto.Description,
+                OwnerId = userId,
+                IsCompleted = false,
+                CreatedAt = DateTime.UtcNow
+            };
 
-        //     var createdTask = await _taskRepository.CreateTaskAsync(taskModel);
-        //     await CreateTaskHistoryEntryAsync(createdTask.TaskId, userId, TaskAction.Created);
-        //     return MapToTaskResponseDto(createdTask);
-        // }
+            var createdTask = await _taskRepository.CreateTaskAsync(taskModel);
+            // await CreateTaskHistoryEntryAsync(createdTask.TaskId, userId, TaskAction.Created);
+            return MapToTaskResponseDto(createdTask);
+        }
 
         // public async Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto)
         // {

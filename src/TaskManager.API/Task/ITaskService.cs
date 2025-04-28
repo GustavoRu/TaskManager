@@ -1,4 +1,5 @@
 using TaskManager.API.Task.DTOs;
+using TaskManager.API.Task.Models;
 namespace TaskManager.API.Task
 {
     public interface ITaskService
@@ -9,5 +10,8 @@ namespace TaskManager.API.Task
         // Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto);
         // Task<bool> DeleteTaskAsync(int id);
         // Task<List<TaskResponseDto>> GetCurrentUserTasksAsync();
+
+
+        // System.Threading.Tasks.Task CreateTaskHistoryEntryAsync(int taskId, int userId, TaskAction action, object changes);
     }
 }

@@ -11,5 +11,7 @@ namespace TaskManager.API.Task
         // Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto);
         // Task<bool> DeleteTaskAsync(int id);
         // Task<List<TaskResponseDto>> GetCurrentUserTasksAsync();
+
+        System.Threading.Tasks.Task AddTaskHistoryAsync(TaskHistoryModel history);
     }
 }

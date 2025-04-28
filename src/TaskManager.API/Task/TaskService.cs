@@ -55,7 +55,7 @@ namespace TaskManager.API.Task
             };
 
             var createdTask = await _taskRepository.CreateTaskAsync(taskModel);
-            // await CreateTaskHistoryEntryAsync(createdTask.TaskId, userId, TaskAction.Created);
+            await CreateTaskHistoryEntryAsync(createdTask.TaskId, userId, TaskAction.Created);
             return MapToTaskResponseDto(createdTask);
         }
 
@@ -106,19 +106,19 @@ namespace TaskManager.API.Task
         //     return tasks.Select(MapToTaskResponseDto).ToList();
         // }
 
-        // private async System.Threading.Tasks.Task CreateTaskHistoryEntryAsync(int taskId, int userId, TaskAction action, object changes = null)
-        // {
-        //     var historyEntry = new TaskHistoryModel
-        //     {
-        //         TaskId = taskId,
-        //         UserId = userId,
-        //         Action = action,
-        //         Timestamp = DateTime.UtcNow,
-        //         ChangesJson = changes != null ? JsonSerializer.Serialize(changes) : JsonSerializer.Serialize(new { })
-        //     };
+        public async System.Threading.Tasks.Task CreateTaskHistoryEntryAsync(int taskId, int userId, TaskAction action, object changes = null)
+        {
+            var historyEntry = new TaskHistoryModel
+            {
+                TaskId = taskId,
+                UserId = userId,
+                Action = action,
+                Timestamp = DateTime.UtcNow,
+                ChangesJson = changes != null ? JsonSerializer.Serialize(changes) : JsonSerializer.Serialize(new { })
+            };
 
-        //     await _taskRepository.AddTaskHistoryAsync(historyEntry);
-        // }
+            await _taskRepository.AddTaskHistoryAsync(historyEntry);
+        }
         private static TaskResponseDto MapToTaskResponseDto(TaskModel task)
         {
             return new TaskResponseDto

@@ -38,5 +38,15 @@ namespace TaskManager.API.Task
             return task;
         }
 
+
+        
+
+
+        public async System.Threading.Tasks.Task AddTaskHistoryAsync(TaskHistoryModel historyEntry)
+        {
+            await _dbContext.TaskHistories.AddAsync(historyEntry);
+            await _dbContext.SaveChangesAsync();
+        }
+
     }
 }

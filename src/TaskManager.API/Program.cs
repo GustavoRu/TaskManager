@@ -6,6 +6,7 @@ using TaskManager.API.Shared.Data;
 using TaskManager.API.Shared.Utils;
 using TaskManager.API.Auth;
 using TaskManager.API.Task;
+using TaskManager.API.Task.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,8 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 //validators
 builder.Services.AddScoped<RegisterDtoValidator>();
 builder.Services.AddScoped<LoginDtoValidator>();
+builder.Services.AddScoped<TaskPostDtoValidator>();
+builder.Services.AddScoped<TaskUpdateDtoValidator>();
 
 
 //TODO:revisar

@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.API.Shared.Data;
-using TaskManager.API.Task.Models;
 using TaskManager.API.Task.DTOs;
-
+using TaskManager.API.Task.Validators;
 
 namespace TaskManager.API.Task
 {
@@ -14,27 +13,15 @@ namespace TaskManager.API.Task
     [ApiController]
     public class TaskController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
         private readonly ITaskService _taskService;
-
-        public TaskController(ApplicationDbContext dbContext, ITaskService taskService)
+        private readonly TaskPostDtoValidator _taskPostValidator;
+        private readonly TaskUpdateDtoValidator _taskUpdateDtoValidator;
+        public TaskController(ITaskService taskService, TaskPostDtoValidator taskPostValidator, TaskUpdateDtoValidator taskUpdateDtoValidator)
         {
-            _dbContext = dbContext;
             _taskService = taskService;
+            _taskPostValidator = taskPostValidator;
+            _taskUpdateDtoValidator = taskUpdateDtoValidator;
         }
-
-        private int GetCurrentUserId()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-            {
-                throw new UnauthorizedAccessException("Usuario no válido o no autenticado");
-            }
-
-            return userId;
-        }
-
 
         [HttpGet]
         [Route("getall")]
@@ -58,8 +45,9 @@ namespace TaskManager.API.Task
         [Route("create")]
         public async Task<IActionResult> Create([FromBody] TaskPostDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var validationResult = await _taskPostValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
 
             var createdTask = await _taskService.CreateTaskAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = createdTask.TaskId }, createdTask);
@@ -68,13 +56,14 @@ namespace TaskManager.API.Task
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] TaskUpdateDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var validationResult = await _taskUpdateDtoValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
 
             var result = await _taskService.UpdateTaskAsync(id, dto);
             if (!result)
                 return NotFound();
-            
+
             return NoContent();
         }
 
@@ -92,7 +81,7 @@ namespace TaskManager.API.Task
             if (!result)
                 return NotFound();
 
-            return NoContent();  
+            return NoContent();
         }
 
     }

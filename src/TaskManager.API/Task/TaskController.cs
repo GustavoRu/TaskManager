@@ -71,32 +71,10 @@ namespace TaskManager.API.Task
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var task = await _dbContext.Tasks.FindAsync(id);
-            if (task == null)
+            var result = await _taskService.UpdateTaskAsync(id, dto);
+            if (!result)
                 return NotFound();
-
-
-            task.Title = dto.Title;
-            task.Description = dto.Description;
-            task.IsCompleted = dto.IsCompleted;
-            // task.Priority = dto.Priority;
-            // task.DueDate = dto.DueDate;
-            task.UpdatedAt = DateTime.UtcNow;
-
-            await _dbContext.SaveChangesAsync();
-
-            var userId = GetCurrentUserId();
-            var historyEntry = new TaskHistoryModel
-            {
-                TaskId = task.TaskId,
-                UserId = userId,
-                Action = TaskAction.Updated,
-                ChangesJson = System.Text.Json.JsonSerializer.Serialize(new { dto.Title, dto.Description, dto.IsCompleted }),
-                Timestamp = DateTime.UtcNow
-            };
-            await _dbContext.TaskHistories.AddAsync(historyEntry);
-            await _dbContext.SaveChangesAsync();
-
+            
             return NoContent();
         }
 

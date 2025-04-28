@@ -38,8 +38,14 @@ namespace TaskManager.API.Task
             return task;
         }
 
+        public async Task<bool> UpdateTaskAsync(TaskModel task)
+        {
+            _dbContext.Tasks.Update(task);
+            var affectedRows = await _dbContext.SaveChangesAsync();
+            return affectedRows > 0;
+        }
 
-        
+
 
 
         public async System.Threading.Tasks.Task AddTaskHistoryAsync(TaskHistoryModel historyEntry)

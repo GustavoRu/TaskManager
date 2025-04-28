@@ -7,8 +7,8 @@ namespace TaskManager.API.Task
     {
         Task<List<TaskModel>> GetAllTasksAsync();
         Task<TaskModel> GetTaskByIdAsync(int id);
-        Task<TaskModel> CreateTaskAsync(TaskModel taskDto);
-        // Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto);
+        Task<TaskModel> CreateTaskAsync(TaskModel task);
+        Task<bool> UpdateTaskAsync(TaskModel task);
         // Task<bool> DeleteTaskAsync(int id);
         // Task<List<TaskResponseDto>> GetCurrentUserTasksAsync();
 

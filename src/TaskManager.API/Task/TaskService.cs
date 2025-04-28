@@ -59,34 +59,34 @@ namespace TaskManager.API.Task
             return MapToTaskResponseDto(createdTask);
         }
 
-        // public async Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto)
-        // {
-        //     var task = await _taskRepository.GetTaskByIdAsync(id);
-        //     if (task == null)
-        //         return false;
+        public async Task<bool> UpdateTaskAsync(int id, TaskUpdateDto taskDto)
+        {
+            var task = await _taskRepository.GetTaskByIdAsync(id);
+            if (task == null)
+                return false;
 
-        //     var oldValues = new { task.Title, task.Description, task.IsCompleted };
+            var oldValues = new { task.Title, task.Description, task.IsCompleted };
 
-        //     task.Title = taskDto.Title;
-        //     task.Description = taskDto.Description;
-        //     task.IsCompleted = taskDto.IsCompleted;
-        //     task.UpdatedAt = DateTime.UtcNow;
+            task.Title = taskDto.Title;
+            task.Description = taskDto.Description;
+            task.IsCompleted = taskDto.IsCompleted;
+            task.UpdatedAt = DateTime.UtcNow;
             
-        //     var result = await _taskRepository.UpdateTaskAsync(task);
-        //     if(result)
-        //     {
-        //         var userId = _userContextAccessor.GetCurrentUserId();
-        //         var changes = new
-        //         {
-        //             OldValues = oldValues,
-        //             NewValues = new { taskDto.Title, taskDto.Description, taskDto.IsCompleted }
-        //         };
+            var result = await _taskRepository.UpdateTaskAsync(task);
+            if(result)
+            {
+                var userId = _userContextAccessor.GetCurrentUserId();
+                var changes = new
+                {
+                    OldValues = oldValues,
+                    NewValues = new { taskDto.Title, taskDto.Description, taskDto.IsCompleted }
+                };
 
-        //         await CreateTaskHistoryEntryAsync(id, userId, TaskAction.Updated, changes);
-        //     }
+                await CreateTaskHistoryEntryAsync(id, userId, TaskAction.Updated, changes);
+            }
 
-        //     return result;                 
-        // }
+            return result;                 
+        }
 
         // public async Task<bool> DeleteTaskAsync(int id)
         // {

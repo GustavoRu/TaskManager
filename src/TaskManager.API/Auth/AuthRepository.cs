@@ -26,5 +26,7 @@ namespace TaskManager.API.Auth
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == email && u.PasswordHash == passwordHash);
         }
+        
+        public IEnumerable<UserModel> Search(Func<UserModel, bool> filter) => _context.Users.Where(filter).ToList();
     }
 }

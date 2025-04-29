@@ -10,11 +10,13 @@ namespace TaskManager.API.Auth
     {
         private readonly IAuthRepository _authRepository;
         private readonly JwtUtility _jwtUtility;
+        public List<string> Errors { get; }
 
         public AuthService(IAuthRepository authRepository, JwtUtility jwtUtility)
         {
             _authRepository = authRepository;
             _jwtUtility = jwtUtility;
+            Errors = new List<string>();
         }
 
         public async Task<bool> RegisterUserAsync(RegisterDto registerDto)
@@ -45,6 +47,16 @@ namespace TaskManager.API.Auth
 
             var token = _jwtUtility.GenerateJwtToken(user);
             return (true, token, user.UserId);
+        }
+
+        public bool Validate(RegisterDto registerDto)
+        {
+            if (_authRepository.Search(u => u.Email == registerDto.Email).Count() > 0)
+            {
+                Errors.Add("El correo ya existe");
+                return false;
+            }
+            return true;
         }
 
     }

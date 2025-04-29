@@ -5,5 +5,6 @@ namespace TaskManager.API.Auth
     {
         Task<UserModel> CreateUserAsync(UserModel user);
         Task<UserModel> GetUserByEmailAndPasswordHashAsync(string email, string passwordHash);
+        IEnumerable<UserModel> Search(Func<UserModel, bool> filter);
     }
 }

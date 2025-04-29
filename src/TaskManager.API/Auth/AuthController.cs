@@ -31,6 +31,11 @@ namespace TaskManager.API.Auth
             if (!validationResult.IsValid){
                 return BadRequest(validationResult.Errors);
             }
+            if (!_authService.Validate(registerDto))
+            {
+                return BadRequest(_authService.Errors);
+            }
+
             var isSuccess = await _authService.RegisterUserAsync(registerDto);
             return Ok(new { isSuccess });
         }

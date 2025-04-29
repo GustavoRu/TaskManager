@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using TaskManager.API.Auth.DTOs;
-using TaskManager.API.Auth;
 using TaskManager.API.User;
 using TaskManager.API.Shared.Models;
 using TaskManager.API.Shared.Utils;

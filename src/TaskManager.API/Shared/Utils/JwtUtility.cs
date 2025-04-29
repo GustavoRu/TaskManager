@@ -8,13 +8,13 @@ using TaskManager.API.User;
 
 namespace TaskManager.API.Shared.Utils
 {
-    public class JwtUtility
+    public class JwtUtility : IJwtUtility
     {
         private readonly IConfiguration _configuration;
+
         public JwtUtility(IConfiguration configuration)
         {
             _configuration = configuration;
-
         }
 
         public string encryptSHA256(string text)
@@ -22,7 +22,7 @@ namespace TaskManager.API.Shared.Utils
             using (SHA256 sha256Hash = SHA256.Create())
             {
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(text));
-
+                
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -40,17 +40,17 @@ namespace TaskManager.API.Shared.Utils
                 new Claim(ClaimTypes.Name, user.Name.ToString()),
                 new Claim(ClaimTypes.Email, user.Email.ToString())
             };
-
+            
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-
+            
             //token detail
             var jwtConfig = new JwtSecurityToken(
                 claims: userClaims,
                 expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: credentials
             );
-
+            
             return new JwtSecurityTokenHandler().WriteToken(jwtConfig);
         }
     }

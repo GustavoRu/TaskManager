@@ -7,10 +7,10 @@ namespace TaskManager.API.Auth
     public class AuthService : IAuthService
     {
         private readonly IAuthRepository _authRepository;
-        private readonly JwtUtility _jwtUtility;
+        private readonly IJwtUtility _jwtUtility;
         public List<string> Errors { get; }
 
-        public AuthService(IAuthRepository authRepository, JwtUtility jwtUtility)
+        public AuthService(IAuthRepository authRepository, IJwtUtility jwtUtility)
         {
             _authRepository = authRepository;
             _jwtUtility = jwtUtility;
@@ -56,6 +56,5 @@ namespace TaskManager.API.Auth
             }
             return true;
         }
-
     }
 }

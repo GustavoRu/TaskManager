@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddSingleton<JwtUtility>();
+builder.Services.AddSingleton<IJwtUtility, JwtUtility>();
 
 builder.Services.AddAuthentication(config =>
 {

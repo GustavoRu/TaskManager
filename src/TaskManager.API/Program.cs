@@ -109,3 +109,4 @@ using (var scope = app.Services.CreateScope())//comentar
 }
 
 app.Run();
+public partial class Program { }

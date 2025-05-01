@@ -21,7 +21,7 @@ namespace TaskManager.Tests.Integration
         {
             // Generamos un GUID único para cada test
             string dbTest = $"TestTaskManagerDb_{Guid.NewGuid()}";
-            
+
             return new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
@@ -65,7 +65,7 @@ namespace TaskManager.Tests.Integration
             // Arrange - Creamos una nueva factory para este test
             var factory = CreateWebApplicationFactory();
             var client = factory.CreateClient();
-            
+
             var registerDto = new RegisterDto
             {
                 Name = "Test User",
@@ -81,7 +81,7 @@ namespace TaskManager.Tests.Integration
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             ((bool)result!.isSuccess).Should().BeTrue();
-            
+
             // Limpieza
             await factory.DisposeAsync();
         }
@@ -92,12 +92,13 @@ namespace TaskManager.Tests.Integration
             // Arrange - Creamos una nueva factory para este test
             var factory = CreateWebApplicationFactory();
             var client = factory.CreateClient();
-            
+
             var registerDto = new RegisterDto
             {
                 Name = "",  // Nombre vacío, debería fallar la validación
                 Email = "invalid-email",
                 Password = "short"
+                
             };
 
             // Act
@@ -105,7 +106,7 @@ namespace TaskManager.Tests.Integration
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            
+
             // Limpieza
             await factory.DisposeAsync();
         }
@@ -117,7 +118,7 @@ namespace TaskManager.Tests.Integration
             // Arrange, creamos una nueva factory para este test
             var factory = CreateWebApplicationFactory();
             var client = factory.CreateClient();
-            
+
             // Primero registramos un usuario para poder hacer login
             var registerDto = new RegisterDto
             {
@@ -144,7 +145,7 @@ namespace TaskManager.Tests.Integration
             ((bool)result!.isSuccess).Should().BeTrue();
             ((string)result.token).Should().NotBeNullOrEmpty();
             ((int)result.userId).Should().BeGreaterThan(0);
-            
+
             // Limpieza
             await factory.DisposeAsync();
         }
@@ -155,7 +156,7 @@ namespace TaskManager.Tests.Integration
             // Arrange, creamos una nueva factory para este test
             var factory = CreateWebApplicationFactory();
             var client = factory.CreateClient();
-            
+
             var loginDto = new LoginDto
             {
                 Email = "nonexistent@example.com",
@@ -169,9 +170,9 @@ namespace TaskManager.Tests.Integration
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            
+
             ((bool)result!.isSuccess).Should().BeFalse();
-            
+
             // Limpieza
             await factory.DisposeAsync();
         }

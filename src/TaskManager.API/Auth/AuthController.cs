@@ -28,12 +28,13 @@ namespace TaskManager.API.Auth
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
             var validationResult = await _registerValidator.ValidateAsync(registerDto);
-            if (!validationResult.IsValid){
-                return BadRequest(validationResult.Errors);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new { isSuccess = false, errors = validationResult.Errors });
             }
             if (!_authService.Validate(registerDto))
             {
-                return BadRequest(_authService.Errors);
+                return BadRequest(new { isSuccess = false, errors = _authService.Errors });
             }
 
             var isSuccess = await _authService.RegisterUserAsync(registerDto);
@@ -47,7 +48,7 @@ namespace TaskManager.API.Auth
             var validationResult = await _loginValidator.ValidateAsync(loginDto);
             if (!validationResult.IsValid)
             {
-                return BadRequest(validationResult.Errors);
+                return BadRequest(new { isSuccess = false, errors = validationResult.Errors });
             }
             var (isSuccess, token, userId) = await _authService.LoginUserAsync(loginDto);
             return Ok(new { isSuccess, token, userId });

@@ -145,6 +145,7 @@ namespace TaskManager.Tests.Integration
             ((bool)result!.isSuccess).Should().BeTrue();
             ((string)result.token).Should().NotBeNullOrEmpty();
             ((int)result.userId).Should().BeGreaterThan(0);
+            ((string)result.userName).Should().Be(registerDto.Name);
 
             // Limpieza
             await factory.DisposeAsync();

@@ -50,8 +50,8 @@ namespace TaskManager.API.Auth
             {
                 return BadRequest(new { isSuccess = false, errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList() });
             }
-            var (isSuccess, token, userId) = await _authService.LoginUserAsync(loginDto);
-            return Ok(new { isSuccess, token, userId });
+            var (isSuccess, token, userId, userName) = await _authService.LoginUserAsync(loginDto);
+            return Ok(new { isSuccess, token, userId, userName });
         }
     }
 

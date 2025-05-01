@@ -33,18 +33,18 @@ namespace TaskManager.API.Auth
             return false;
         }
 
-        public async Task<(bool isSuccess, string token, int userId)> LoginUserAsync(LoginDto loginDto)
+        public async Task<(bool isSuccess, string token, int userId, string userName)> LoginUserAsync(LoginDto loginDto)
         {
             var passwordHash = _jwtUtility.encryptSHA256(loginDto.Password);
             var user = await _authRepository.GetUserByEmailAndPasswordHashAsync(loginDto.Email, passwordHash);
 
             if (user == null)
             {
-                return (false, null, 0);
+                return (false, null, 0, null);
             }
 
             var token = _jwtUtility.GenerateJwtToken(user);
-            return (true, token, user.UserId);
+            return (true, token, user.UserId, user.Name);
         }
 
         public bool Validate(RegisterDto registerDto)

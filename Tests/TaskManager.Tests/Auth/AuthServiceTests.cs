@@ -82,7 +82,7 @@ namespace TaskManager.Tests.Auth
             };
 
             var passwordHash = "hashed_password";
-            var user = new UserModel { UserId = 1, Email = loginDto.Email, PasswordHash = passwordHash };
+            var user = new UserModel { UserId = 1, Name = "Test User", Email = loginDto.Email, PasswordHash = passwordHash };
             var token = "jwt_token";
 
             _mockJwtUtility.Setup(x => x.encryptSHA256(loginDto.Password)).Returns(passwordHash);
@@ -97,6 +97,7 @@ namespace TaskManager.Tests.Auth
             result.isSuccess.Should().BeTrue();
             result.token.Should().Be(token);
             result.userId.Should().Be(user.UserId);
+            result.userName.Should().Be(user.Name);
         }
 
         [Fact]
@@ -120,7 +121,7 @@ namespace TaskManager.Tests.Auth
             result.isSuccess.Should().BeFalse();
             result.token.Should().BeNull();
             result.userId.Should().Be(0);
-
+            result.userName.Should().BeNull();
         }
 
         [Fact]

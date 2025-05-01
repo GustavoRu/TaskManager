@@ -30,7 +30,7 @@ namespace TaskManager.API.Auth
             var validationResult = await _registerValidator.ValidateAsync(registerDto);
             if (!validationResult.IsValid)
             {
-                return BadRequest(new { isSuccess = false, errors = validationResult.Errors });
+                return BadRequest(new { isSuccess = false, errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList() });
             }
             if (!_authService.Validate(registerDto))
             {
@@ -48,7 +48,7 @@ namespace TaskManager.API.Auth
             var validationResult = await _loginValidator.ValidateAsync(loginDto);
             if (!validationResult.IsValid)
             {
-                return BadRequest(new { isSuccess = false, errors = validationResult.Errors });
+                return BadRequest(new { isSuccess = false, errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList() });
             }
             var (isSuccess, token, userId) = await _authService.LoginUserAsync(loginDto);
             return Ok(new { isSuccess, token, userId });

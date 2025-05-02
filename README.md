@@ -9,6 +9,7 @@ API REST para administrar tareas, con autenticación de usuarios y manejo de tar
 - Para este mvp cualquier usuario logueado puede administrar tareas
 - Los dominios de la aplicacion en Controller, Service, y Repository (en caso de interaccion con una api externa podriamos agregar una capa core/client), esto hace que la aplicación sea fácil de extender y modificar sin tener que afectar a otras funcionalidades. 
 - Aplicamos inversión de dependencias para favorecer el desacoplamiento entre componentes. 
+- Se realizan pruebas unitarias sobre la capa service que suele ser donde se maneja la lógica de negocio principal, se incluyeron pruebas de integración para validar el funcionamiento de la API de forma completa.
 - Se eligió C# .NET aunque el enunciado sugiere implementar el backend en Java, Kotlin o Python porque tengo mas experiencia con el mismo lo que me permite implementar una solución más prolija, manteniendo buenas prácticas como la inyección de dependencias, separación de responsabilidades y uso de DTOs y validadores (aunque todo lo mencionado no es exlusivo del lenguaje y de hecho en algunas partes se puede mejorar, se intentó entregar un mvp lo mas prolijo posible).
 - Al igual que Java o Kotlin, C# es fuertemente tipado, lo que ayuda a prevenir muchos errores en tiempo de compilación.
 

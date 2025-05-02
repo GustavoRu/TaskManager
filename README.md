@@ -29,13 +29,17 @@ Para ejecutar esta aplicación, necesitarás tener instalado:
    git clone <url-del-repositorio>
    cd TaskManager
    ```
+2. **Instalar .NET EF Core tools (solo la primera vez)**
+   ```bash
+   dotnet tool install --global dotnet-ef
+   ```
 
-2. **Levantar la base de datos SQL Server con Docker**
+3. **Levantar la base de datos SQL Server con Docker**
 
    El proyecto incluye un archivo `docker-compose.yml` para facilitar la creación de la instancia de SQL Server:
 
    ```bash
-   docker-compose up -d
+   docker-compose up -d sqlserver
    ```
 
    Esto levantará un contenedor de SQL Server en el puerto 14333 con las siguientes credenciales:
@@ -43,38 +47,27 @@ Para ejecutar esta aplicación, necesitarás tener instalado:
    - Contraseña: YourStrong!Passw0rd
    - Base de datos: TaskManagerDb (se creará automáticamente al ejecutar la aplicación)
 
-3. **Restaurar las dependencias del proyecto**
-
+4. **Ejecutar migraciones**
    ```bash
-   dotnet restore
-   ```
+   # En Linux/Mac
+   chmod +x init-db.sh
+   ./init-db.sh
 
-## Ejecutar la aplicación
-
-1. **Navegar al directorio del proyecto API**
-
-   ```bash
+   # O manualmente
    cd src/TaskManager.API
-   ```
-
-2. **Ejecutar migraciones (primera vez)**
-
-   Si es la primera vez que ejecutas la aplicación, necesitas aplicar las migraciones para crear el esquema de la base de datos:
-
-   ```bash
    dotnet ef database update
    ```
 
-3. **Iniciar la API**
-
+5. **Levantar la API**
    ```bash
-   dotnet run
+   docker-compose up -d api
    ```
-
    La API estará disponible en: 
    - https://localhost:5102
 
    Puedes acceder a la documentación de Swagger en: http://localhost:5102/swagger
+
+
 
 ## Ejecutar las pruebas
 

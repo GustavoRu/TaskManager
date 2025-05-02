@@ -3,9 +3,9 @@
 API REST para administrar tareas, con autenticación de usuarios y manejo de tareas personales.
 
 ## Decisiones tomadas:
-- Se decide usar base de datos relacional para generar la relacion entre tarea y usuario
+- Se decide usar base de datos relacional para generar la relacion entre tarea y usuario (la tarea será del usuario creador)
 - Aunque el enunciado no establece reglas específicas sobre los permisos entre usuarios, decidí implementar la posibilidad de que cualquier usuario autenticado pueda editar o eliminar tareas, incluso si no es su creador ya que creo que eso es lo que le da el enfoque colaborativo que se menciona en el challenge (mismo cuando se menciona crear, editar, eliminar no dice que solo las suyas), se toma como referencia trello/notion que los miembros de un equipo pueden gestionar tareas ajenas.
-- Si fuera necesario este comportamiento podría modificarse fácilmente agregando validaciones de propiedad/ownership (de hecho para hacer mas consistente se agrega modelo y registro de historial pero no se termina aplicando en front por temas de tiempo).
+- Si fuera necesario este comportamiento podría modificarse fácilmente agregando validaciones de propiedad/ownership (de hecho para hacer mas consistente se agrega modelo y registro de historial pero no se termina aplicando en front por temas de tiempo), la tabla tasks tiene campos OwnerId,Priority pensados en caso de mejoras.
 - Para este mvp cualquier usuario logueado puede administrar tareas
 - Los dominios de la aplicacion en Controller, Service, y Repository (en caso de interaccion con una api externa podriamos agregar una capa core/client), esto hace que la aplicación sea fácil de extender y modificar sin tener que afectar a otras funcionalidades. 
 - Aplicamos inversión de dependencias para favorecer el desacoplamiento entre componentes. 

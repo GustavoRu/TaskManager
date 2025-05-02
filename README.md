@@ -68,15 +68,28 @@ Para ejecutar esta aplicación, necesitarás tener instalado:
    Puedes acceder a la documentación de Swagger en: http://localhost:5102/swagger
 
 
-
 ## Ejecutar las pruebas
 
-El proyecto incluye pruebas unitarias e integración que puedes ejecutar con los siguientes comandos:
+El proyecto incluye pruebas unitarias y de integración que puedes ejecutar fácilmente. Las pruebas de integración utilizan una base de datos en memoria, por lo que no necesitas tener SQL Server configurado específicamente para ellas.
+
+### Requisitos para ejecutar tests:
+- .NET SDK 8.0 instalado en tu máquina local
+
+### Pasos para ejecutar las pruebas:
 
 ```bash
+# Ejecutar todas las pruebas
+dotnet test
+
+# O navegar al directorio de pruebas
 cd Tests/TaskManager.Tests
 dotnet test
 ```
+
+### Tipos de pruebas incluidas:
+
+1. **Pruebas unitarias**: Verifican componentes individuales como servicios usando mocks para sus dependencias.
+2. **Pruebas de integración**: Prueban la interacción entre componentes usando una base de datos en memoria.
 
 ## Características principales
 
@@ -97,36 +110,101 @@ dotnet test
   - `Auth`: Pruebas de autenticación
   - `Task`: Pruebas de gestión de tareas
 
+
+
+
 ## Solución de problemas comunes
 
 ### Error de conexión a la base de datos
 
 Si tienes problemas para conectar con la base de datos:
 
-1. Verifica que el contenedor Docker esté corriendo:
+1. Verifica que los contenedores Docker estén corriendo correctamente:
    ```bash
    docker ps
    ```
 
-2. Asegúrate de que la cadena de conexión en `appsettings.json` coincida con la configuración del contenedor:
+2. Verifica los logs del contenedor de SQL Server:
+   ```bash
+   docker logs taskmanager_sqlserver
+   ```
+
+3. Si estás ejecutando la API localmente (sin Docker), asegúrate de que la cadena de conexión en `appsettings.json` use `localhost`:
    ```json
    "ConnectionStrings": {
      "DefaultConnection": "Server=localhost,14333;Database=TaskManagerDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
    }
    ```
 
+4. Si estás usando la API en Docker, la cadena de conexión debe usar el nombre del servicio:
+   ```json
+   "ConnectionStrings": {
+     "DefaultConnection": "Server=sqlserver,1433;Database=TaskManagerDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true;"
+   }
+   ```
+
+### Problemas con la API en Docker
+
+1. Verifica los logs de la API:
+   ```bash
+   docker logs taskmanager_api
+   ```
+
+2. Si hay problemas de CORS al acceder desde el frontend:
+   - Asegúrate de que tu frontend esté usando `http://localhost:5102` (o el puerto correcto)
+   - Verifica que en `Program.cs` esté configurado correctamente el origen permitido:
+     ```csharp
+     policy.WithOrigins("http://localhost:7000") // Ajusta según el puerto de tu frontend
+     ```
+
+3. Si los contenedores no pueden comunicarse entre sí:
+   - Asegúrate de que están en la misma red de Docker
+   - Verifica que la API está esperando a que SQL Server esté disponible
+
+### Errores en las migraciones
+
+1. Si el script `init-db.sh` falla:
+   ```bash
+   # Ejecuta manualmente las migraciones
+   cd src/TaskManager.API
+   dotnet ef database update
+   ```
+
+2. Si las migraciones no pueden conectarse a la base de datos:
+   - Verifica que SQL Server esté en ejecución
+   - Asegúrate de que la cadena de conexión sea correcta para el entorno local
+
 ### Errores de compilación o ejecución
 
-- Asegúrate de tener instalado .NET 8.0 SDK:
-  ```bash
-  dotnet --version
-  ```
+1. Para problemas con la API local:
+   - Asegúrate de tener instalado .NET 8.0 SDK:
+     ```bash
+     dotnet --version
+     ```
+   - Limpia la solución y reconstruye:
+     ```bash
+     dotnet clean
+     dotnet build
+     ```
 
-- Limpia la solución y reconstruye:
-  ```bash
-  dotnet clean
-  dotnet build
-  ```
+2. Para problemas con la imagen Docker:
+   - Reconstruye la imagen:
+     ```bash
+     docker-compose build api
+     ```
+   - Reinicia los contenedores:
+     ```bash
+     docker-compose down
+     docker-compose up -d
+     ```
+
+3. Para reiniciar toda la aplicación desde cero:
+   ```bash
+   docker-compose down -v  # El flag -v elimina los volúmenes (¡cuidado! borrará los datos)
+   docker-compose up -d
+   ```
+
+Esta sección actualizada cubre los problemas más comunes que pueden surgir en el entorno dockerizado y proporciona soluciones específicas para cada caso, distinguiendo entre ejecución local y en contenedores.
 
 ## Tecnologías utilizadas
 
